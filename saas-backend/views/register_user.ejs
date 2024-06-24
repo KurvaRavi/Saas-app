@@ -1,0 +1,29 @@
+<!-- register_user.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register User</title>
+</head>
+<body>
+    <h1>Register User</h1>
+    <form action="/admin/register_user" method="POST">
+      <input type="text" name="username" placeholder="Username" required><br><br>
+      <input type="password" name="password" placeholder="Password" required><br><br>
+  
+      <!-- Role selection dropdown -->
+      <label for="role">Role:</label>
+      <select name="role" id="role">
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+          <option value="Super Admin">Super Admin</option>
+      </select><br><br>
+  
+      <button type="submit">Register</button>
+    </form>
+    <!-- Home link to admin_dashboard -->
+    <p><a href="/dashboard">Home</a></p>
+</body>
+</html>
+
+<a href="/logout">Logout</a>

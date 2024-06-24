@@ -1,0 +1,113 @@
+<!-- 
+  <h1>Welcome, Super Admin <%= user.name %></h1>
+  <p>This is the super admin dashboard.</p> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin Dashboard</title>
+</head>
+<body>
+  <h1>Welcome, <%= user.name %>!</h1>
+  <h2>Manage SaaS Plans</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% plans.forEach(plan => { %>
+        <tr>
+          <td><%= plan.id %></td>
+          <td><input type="text" value="<%= plan.name %>" data-id="<%= plan.id %>" class="plan-name"></td>
+          <td><input type="text" value="<%= plan.description %>" data-id="<%= plan.id %>" class="plan-description"></td>
+          <td><input type="text" value="<%= plan.price %>" data-id="<%= plan.id %>" class="plan-price"></td>
+          <td>
+            <button onclick="updatePlan(<%= plan.id %>)">Update</button>
+            <button onclick="deletePlan(<%= plan.id %>)">Delete</button>
+
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <h3>Add New Plan</h3>
+  <form id="add-plan-form">
+    <input type="text" id="new-plan-name" placeholder="Name" required>
+    <input type="text" id="new-plan-description" placeholder="Description" required>
+    <input type="text" id="new-plan-price" placeholder="Price" required>
+    <button type="submit">Add Plan</button>
+  </form>
+
+  <script>
+    function updatePlan(id) {
+      const name = document.querySelector(`.plan-name[data-id='${id}']`).value;
+      const description = document.querySelector(`.plan-description[data-id='${id}']`).value;
+      const price = document.querySelector(`.plan-price[data-id='${id}']`).value;
+
+      fetch(`/superadmin/plans/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, description, price })
+      }).then(response => {
+        if (response.ok) {
+          alert('Plan updated successfully');
+        } else {
+          alert('Failed to update plan');
+        }
+      });
+    }
+
+    function deletePlan(id) {
+      fetch(`/superadmin/plans/${id}`, {
+        method: 'DELETE',
+      }).then(response => {
+        if (response.ok) {
+          alert('Plan deleted successfully');
+          window.location.reload();
+        } else {
+          alert('Failed to delete plan');
+        }
+      });
+    }
+
+    document.getElementById('add-plan-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-plan-name').value;
+      const description = document.getElementById('new-plan-description').value;
+      const price = document.getElementById('new-plan-price').value;
+
+      fetch('/superadmin/plans', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, description, price })
+      }).then(response => {
+        if (response.ok) {
+          alert('Plan added successfully');
+          window.location.reload();
+        } else {
+          alert('Failed to add plan');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+  <a href="/logout">Logout</a>

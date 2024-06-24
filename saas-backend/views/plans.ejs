@@ -1,0 +1,32 @@
+<h1>Manage Plans</h1>
+<form action="/plans" method="POST">
+  <div>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" required>
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <input type="text" id="description" name="description" required>
+  </div>
+  <div>
+    <label for="price">Price</label>
+    <input type="text" id="price" name="price" required>
+  </div>
+  <button type="submit">Add Plan</button>
+</form>
+<ul>
+  <% plans.forEach(plan => { %>
+    <li>
+      <%= plan.name %> - <%= plan.description %> - <%= plan.price %>
+      <form action="/plans/<%= plan._id %>?_method=PUT" method="POST">
+        <input type="text" name="name" value="<%= plan.name %>">
+        <input type="text" name="description" value="<%= plan.description %>">
+        <input type="text" name="price" value="<%= plan.price %>">
+        <button type="submit">Edit</button>
+      </form>
+      <form action="/plans/<%= plan._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
